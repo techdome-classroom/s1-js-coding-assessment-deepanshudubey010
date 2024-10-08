@@ -4,26 +4,23 @@ function numIslands(grid) {
     let numIslands = 0;
 
     const dfs = (i, j) => {
-        
         if (i < 0 || i >= grid.length || j < 0 || j >= grid[0].length || grid[i][j] === 'W') {
             return;
         }
 
-        
         grid[i][j] = 'W';
 
-        
-        dfs(i + 1, j); // down
-        dfs(i - 1, j); // up
-        dfs(i, j + 1); // right
-        dfs(i, j - 1); // left
+        dfs(i + 1, j);
+        dfs(i - 1, j);
+        dfs(i, j + 1);
+        dfs(i, j - 1);
     };
 
     for (let i = 0; i < grid.length; i++) {
         for (let j = 0; j < grid[0].length; j++) {
             if (grid[i][j] === 'L') {
                 numIslands++;
-                dfs(i, j); // Island ko explore karne ke liye DFS call
+                dfs(i, j);
             }
         }
     }
@@ -31,7 +28,6 @@ function numIslands(grid) {
     return numIslands;
 }
 
-// Dispatch 1
 const dispatch1 = [
     ["L", "L", "L", "L", "W"],
     ["L", "L", "W", "L", "W"],
@@ -40,7 +36,6 @@ const dispatch1 = [
 ];
 console.log(numIslands(dispatch1)); // Output: 1
 
-// Dispatch 2
 const dispatch2 = [
     ["L", "L", "W", "W", "W"],
     ["L", "L", "W", "W", "W"],
@@ -48,3 +43,4 @@ const dispatch2 = [
     ["W", "W", "W", "L", "L"],
 ];
 console.log(numIslands(dispatch2)); // Output: 3
+
