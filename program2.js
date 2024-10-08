@@ -1,33 +1,32 @@
 const decodeTheRing = function (s, p) {
-
-    function isMatch(secret, pattern) {
+    const sLen = s.length;
+    const pLen = p.length;
     
-   const m = secret.length;
-    const n = pattern.length;
+    // Create a 2D array for memoization
+    const dp = Array.from({ length: sLen + 1 }, () => Array(pLen + 1).fill(false));
+    dp[0][0] = true; // Both string and pattern are empty
 
-    // Create a 2D DP array with (m+1) x (n+1)
-    const dp = Array(m + 1).fill(null).map(() => Array(n + 1).fill(false));
-
-    // Empty pattern matches empty message
-    dp[0][0] = true;
-
-    // Fill the first row for patterns with '*'
-    for (let j = 1; j <= n; j++) {
-        if (pattern[j - 1] === '*') {
+    // Handle patterns with leading '*'
+    for (let j = 1; j <= pLen; j++) {
+        if (p[j - 1] === '*') {
             dp[0][j] = dp[0][j - 1];
         }
     }
 
-    // Fill the DP table
-    for (let i = 1; i <= m; i++) {
-        for (let j = 1; j <= n; j++) {
-            if (pattern[j - 1] === secret[i - 1] || pattern[j - 1] === '?') {
-                dp[i][j] = dp[i - 1][j - 1]; // Match single characters or '?'
-            } else if (pattern[j - 1] === '*') {
-                dp[i][j] = dp[i - 1][j] || dp[i][j - 1]; // '*' can represent empty or more
+    // Fill the dp table
+    for (let i = 1; i <= sLen; i++) {
+        for (let j = 1; j <= pLen; j++) {
+            if (p[j - 1] === '*') {
+                // '*' can match no character (dp[i][j-1]) or one character (dp[i-1][j])
+                dp[i][j] = dp[i][j - 1] || dp[i - 1][j];
+            } else if (p[j - 1] === '?' || p[j - 1] === s[i - 1]) {
+                // Either a '?' matches any character or they are the same
+                dp[i][j] = dp[i - 1][j - 1];
             }
         }
     }
 
-    // The answer is whether the whole secret matches the whole pattern
-    return dp[m][n];
+    return dp[sLen][pLen];
+};
+
+module.exports = decodeTheRing;
