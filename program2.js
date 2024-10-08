@@ -1,7 +1,8 @@
 const decodeTheRing = function (s, p) {
 
     function isMatch(secret, pattern) {
-    const m = secret.length;
+    
+   const m = secret.length;
     const n = pattern.length;
 
     // Create a 2D DP array with (m+1) x (n+1)
@@ -30,15 +31,3 @@ const decodeTheRing = function (s, p) {
 
     // The answer is whether the whole secret matches the whole pattern
     return dp[m][n];
-}
-
-// Example test cases
-console.log(isMatch("aa", "a")); // Output: false
-console.log(isMatch("aa", "*")); // Output: true
-console.log(isMatch("cb", "?a")); // Output: false
-console.log(isMatch("adceb", "*a*b")); // Output: true
-console.log(isMatch("acdcb", "a*c?b")); // Output: false
-
-  };
-  
-  module.exports = decodeTheRing;
