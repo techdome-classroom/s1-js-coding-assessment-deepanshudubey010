@@ -1,41 +1,50 @@
-const getTotalIsles = function (grid) {
-  if (!grid || grid.length === 0) {
-    return 0;
-  }
+function numIslands(grid) {
+    if (grid.length === 0) return 0;
 
-  const rows = grid.length;
-  const cols = grid[0].length;
-  let islandCount = 0;
+    let numIslands = 0;
 
-  const dfs = function (r, c) {
-    // Check for out of bounds and water
-    if (r < 0 || r >= rows || c < 0 || c >= cols || grid[r][c] === 'W') {
-      return;
+    const dfs = (i, j) => {
+        
+        if (i < 0 || i >= grid.length || j < 0 || j >= grid[0].length || grid[i][j] === 'W') {
+            return;
+        }
+
+        
+        grid[i][j] = 'W';
+
+        
+        dfs(i + 1, j); // down
+        dfs(i - 1, j); // up
+        dfs(i, j + 1); // right
+        dfs(i, j - 1); // left
+    };
+
+    for (let i = 0; i < grid.length; i++) {
+        for (let j = 0; j < grid[0].length; j++) {
+            if (grid[i][j] === 'L') {
+                numIslands++;
+                dfs(i, j); // Island ko explore karne ke liye DFS call
+            }
+        }
     }
 
-    // Mark the cell as visited by changing 'L' to 'W'
-    grid[r][c] = 'W'; 
+    return numIslands;
+}
 
-    // Explore all four directions (up, down, left, right)
-    dfs(r - 1, c); // Up
-    dfs(r + 1, c); // Down
-    dfs(r, c - 1); // Left
-    dfs(r, c + 1); // Right
-  };
+// Dispatch 1
+const dispatch1 = [
+    ["L", "L", "L", "L", "W"],
+    ["L", "L", "W", "L", "W"],
+    ["L", "L", "W", "W", "W"],
+    ["W", "W", "W", "W", "W"],
+];
+console.log(numIslands(dispatch1)); // Output: 1
 
-  // Traverse the entire grid
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      // If we find land 'L', we found an island
-      if (grid[r][c] === 'L') {
-        islandCount++;
-        // Use DFS to mark all connected land as visited
-        dfs(r, c);
-      }
-    }
-  }
-
-  return islandCount;
-};
-
-module.exports = getTotalIsles;
+// Dispatch 2
+const dispatch2 = [
+    ["L", "L", "W", "W", "W"],
+    ["L", "L", "W", "W", "W"],
+    ["W", "W", "L", "W", "W"],
+    ["W", "W", "W", "L", "L"],
+];
+console.log(numIslands(dispatch2)); // Output: 3
