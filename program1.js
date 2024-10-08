@@ -1,40 +1,40 @@
+ const getTotalIsles = function (grid) {
+    if (!grid || grid.length === 0) {
+        return 0;
+    }
 
-function numIslands(grid) {
-    if (grid.length === 0) return 0;
-
-    let numIslands = 0;
     const rows = grid.length;
     const cols = grid[0].length;
+    let numIslands = 0;
 
-    const dfs = (r, c) => {
-        if (r < 0 || r >= rows || c < 0 || c >= cols || grid[r][c] === 'W') {
+    const dfs = (i, j) => {
+        // Base case: if we are out of bounds or at water, return.
+        if (i < 0 || i >= rows || j < 0 || j >= cols || grid[i][j] === 'W') {
             return;
         }
-        grid[r][c] = 'W'; // Mark the land as water to avoid counting it again
-        dfs(r + 1, c); // down
-        dfs(r - 1, c); // up
-        dfs(r, c + 1); // right
-        dfs(r, c - 1); // left
+
+        // Mark this cell as visited by changing 'L' to 'W'.
+        grid[i][j] = 'W';
+
+        // Move in all four directions
+        dfs(i + 1, j); // down
+        dfs(i - 1, j); // up
+        dfs(i, j + 1); // right
+        dfs(i, j - 1); // left
     };
 
-    for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-            if (grid[r][c] === 'L') {
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            // Found an island
+            if (grid[i][j] === 'L') {
                 numIslands++;
-                dfs(r, c);
+                // Use DFS to mark all connected land pieces as visited
+                dfs(i, j);
             }
         }
     }
 
     return numIslands;
-}
+};
 
-// Example usage:
-const grid = [
-    ['L', 'L', 'W', 'L', 'W'],
-    ['L', 'W', 'W', 'L', 'L'],
-    ['W', 'L', 'W', 'W', 'W'],
-    ['L', 'L', 'L', 'W', 'L']
-];
-
-console.log(numIslands(grid)); // Output: 3
+module.exports = getTotalIsles;
